@@ -11,10 +11,19 @@ config_version=5
 [application]
 
 config/name="Static Type Godot Example"
+run/main_scene="uid://by85xsaayserk"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+boot_splash/bg_color=Color(0.12549, 0.12549, 0.12549, 1)
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=480
+window/stretch/mode="canvas_items"
 
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.12549, 0.12549, 0.12549, 1)
