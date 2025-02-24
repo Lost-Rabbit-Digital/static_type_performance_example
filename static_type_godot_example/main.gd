@@ -1,12 +1,14 @@
 extends Control
 
-@onready var title: RichTextLabel = %Title
-@onready var configuration: RichTextLabel = %Configuration
-@onready var resultslabel: RichTextLabel = %Results
+# Configuration Section
+@onready var label_information: RichTextLabel = %LabelInformation
+
+# Results Section
+@onready var label_current_status: RichTextLabel = %LabelCurrentStatus
+@onready var label_results: RichTextLabel = %LabelResults
 
 const ITERATIONS: int = 1_000_000
 const WARMUP_ITERATIONS: int = 1_000
-
 
 # Test variables
 var untyped_int = 0
@@ -18,25 +20,21 @@ var typed_vector: Vector2 = Vector2.ZERO
 var untyped_string = ""
 var typed_string: String = ""
 
-var results: Dictionary = {}
+var results_data: Dictionary = {}
 
 func _ready() -> void:
-	_print_header()
-	_print_configuration()
+	_setup_configuration_section()
 	_warmup()
 	_run_all_tests()
-	_print_results()
+	_display_results()
 
-func _print_header() -> void:
-	rich_text_label.append_text("[center][color=#FFA500]Static Typing Performance Analysis[/color]\n")
-	rich_text_label.append_text("[color=#888888]Godot 4.4 - Debug Build[/color]\n")
-	rich_text_label.append_text("=================================\n\n")
-	rich_text_label.append_text("[color=#FFA500]Test Configuration:[/color]\n")
-	rich_text_label.append_text("Iterations: [color=#FFFFFF]{0}[/color]\n".format([ITERATIONS]))
-	rich_text_label.append_text("Warmup Cycles: [color=#FFFFFF]{0}[/color]\n\n".format([WARMUP_ITERATIONS]))
+func _setup_configuration_section() -> void:
+	label_information.text = """Information on the test
+	Iterations: {0}
+	Warmup Cycles: {1}""".format([ITERATIONS, WARMUP_ITERATIONS])
 
 func _warmup() -> void:
-	rich_text_label.append_text("[color=#888888]Warming up engine...[/color]\n\n")
+	label_current_status.text = "Warming up the engines..."
 	for i in WARMUP_ITERATIONS:
 		var temp = 0
 		temp += 1
@@ -53,18 +51,6 @@ func _time_function(test_func: Callable) -> float:
 	var end_time = Time.get_ticks_msec()
 	return end_time - start_time
 
-func _get_performance_color(improvement: float) -> String:
-	if improvement >= 30.0:
-		return "#00FF00" # Bright green for excellent
-	elif improvement >= 20.0:
-		return "#90EE90" # Light green for good
-	elif improvement >= 10.0:
-		return "#FFD700" # Gold for moderate
-	elif improvement >= 5.0:
-		return "#FFA500" # Orange for minor
-	else:
-		return "#FF6347" # Tomato for minimal
-
 func _format_ops_per_second(time_ms: float) -> String:
 	var ops_per_sec = ITERATIONS / (time_ms / 1000.0)
 	if ops_per_sec >= 1_000_000:
@@ -74,8 +60,23 @@ func _format_ops_per_second(time_ms: float) -> String:
 	else:
 		return "%.2f" % ops_per_sec
 
+func _display_results() -> void:
+	label_current_status.text = "Completed the benchmark"
+	
+	var results_text = ""
+	for test_name in results_data:
+		var test = results_data[test_name]
+		results_text += "%s: %.2fms -> %.2fms (%.2f%% improvement, %s ops/sec)\n" % [
+			test_name.capitalize(),
+			test.untyped,
+			test.typed,
+			test.improvement,
+			test.ops_per_sec_typed
+		]
+	
+	label_results.text = results_text
+
 func _test_integer_operations() -> void:
-	# Test implementation remains the same
 	var untyped_time = _time_function(func():
 		for i in ITERATIONS:
 			untyped_int += 1
@@ -90,13 +91,12 @@ func _test_integer_operations() -> void:
 			typed_int /= 2
 	)
 	
-	results["integer"] = {
+	results_data["integer"] = {
 		"untyped": untyped_time,
 		"typed": typed_time,
 		"improvement": ((untyped_time - typed_time) / untyped_time) * 100,
 		"ops_per_sec_typed": _format_ops_per_second(typed_time)
 	}
-
 
 func _test_float_operations() -> void:
 	var untyped_time = _time_function(func():
@@ -113,7 +113,7 @@ func _test_float_operations() -> void:
 			typed_float /= 1.5
 	)
 	
-	results["float"] = {
+	results_data["float"] = {
 		"untyped": untyped_time,
 		"typed": typed_time,
 		"improvement": ((untyped_time - typed_time) / untyped_time) * 100,
@@ -137,7 +137,7 @@ func _test_vector_operations() -> void:
 			var _dist = typed_vector.distance_to(Vector2.ZERO)
 	)
 	
-	results["vector"] = {
+	results_data["vector"] = {
 		"untyped": untyped_time,
 		"typed": typed_time,
 		"improvement": ((untyped_time - typed_time) / untyped_time) * 100,
@@ -159,55 +159,9 @@ func _test_string_operations() -> void:
 			typed_string = typed_string.substr(0, 4)
 	)
 	
-	results["string"] = {
+	results_data["string"] = {
 		"untyped": untyped_time,
 		"typed": typed_time,
 		"improvement": ((untyped_time - typed_time) / untyped_time) * 100,
 		"ops_per_sec_typed": _format_ops_per_second(typed_time)
 	}
-
-
-func _print_column_headers() -> void:
-	rich_text_label.append_text("[table=9]")  # Increased from 5 to 9 to accommodate separators
-	rich_text_label.append_text("[cell][color=#FFA500]Operation Type[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
-	rich_text_label.append_text("[cell][color=#FFA500]Untyped (ms)[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
-	rich_text_label.append_text("[cell][color=#FFA500]Typed (ms)[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
-	rich_text_label.append_text("[cell][color=#FFA500]Improvement[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
-	rich_text_label.append_text("[cell][color=#FFA500]Operations/sec[/color][/cell]")
-	rich_text_label.append_text("[/table]\n")
-
-func _print_results() -> void:
-	rich_text_label.append_text("[color=#FFA500]Performance Analysis Results[/color]\n")
-	rich_text_label.append_text("===========================\n\n")
-	
-	_print_column_headers()
-	
-	for test_name in results:
-		var test = results[test_name]
-		var improvement = test.improvement
-		var perf_color = _get_performance_color(improvement)
-		
-		rich_text_label.append_text("[table=9]")  # Increased from 5 to 9
-		# Operation type
-		rich_text_label.append_text("[cell][color=#FFA500]{0}[/color][/cell]".format([test_name.capitalize()]))
-		# Separator
-		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
-		# Untyped time
-		rich_text_label.append_text("[cell][color=yellow]%.2f[/color][/cell]" % test.untyped)
-		# Separator
-		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
-		# Typed time
-		rich_text_label.append_text("[cell][color=#00FF00]%.2f[/color][/cell]" % test.typed)
-		# Separator
-		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
-		# Improvement percentage with color
-		rich_text_label.append_text("[cell][color={0}]%.2f%%[/color][/cell]".format([perf_color]) % improvement)
-		# Separator
-		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
-		# Operations per second
-		rich_text_label.append_text("[cell][color=#FFFFFF]{0}[/color][/cell]".format([test.ops_per_sec_typed]))
-		rich_text_label.append_text("[/table]\n")
