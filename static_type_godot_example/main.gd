@@ -1,9 +1,12 @@
 extends Control
 
-@onready var rich_text_label: RichTextLabel = %RichTextLabel
+@onready var title: RichTextLabel = %Title
+@onready var configuration: RichTextLabel = %Configuration
+@onready var resultslabel: RichTextLabel = %Results
 
 const ITERATIONS: int = 1_000_000
 const WARMUP_ITERATIONS: int = 1_000
+
 
 # Test variables
 var untyped_int = 0
@@ -18,9 +21,8 @@ var typed_string: String = ""
 var results: Dictionary = {}
 
 func _ready() -> void:
-	rich_text_label.clear()
 	_print_header()
-	
+	_print_configuration()
 	_warmup()
 	_run_all_tests()
 	_print_results()
@@ -62,15 +64,6 @@ func _get_performance_color(improvement: float) -> String:
 		return "#FFA500" # Orange for minor
 	else:
 		return "#FF6347" # Tomato for minimal
-
-func _print_column_headers() -> void:
-	rich_text_label.append_text("[table=5]")
-	rich_text_label.append_text("[cell][color=#FFA500]Operation Type[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#FFA500]Untyped (ms)[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#FFA500]Typed (ms)[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#FFA500]Improvement[/color][/cell]")
-	rich_text_label.append_text("[cell][color=#FFA500]Operations/sec[/color][/cell]")
-	rich_text_label.append_text("[/table]\n")
 
 func _format_ops_per_second(time_ms: float) -> String:
 	var ops_per_sec = ITERATIONS / (time_ms / 1000.0)
@@ -173,6 +166,20 @@ func _test_string_operations() -> void:
 		"ops_per_sec_typed": _format_ops_per_second(typed_time)
 	}
 
+
+func _print_column_headers() -> void:
+	rich_text_label.append_text("[table=9]")  # Increased from 5 to 9 to accommodate separators
+	rich_text_label.append_text("[cell][color=#FFA500]Operation Type[/color][/cell]")
+	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
+	rich_text_label.append_text("[cell][color=#FFA500]Untyped (ms)[/color][/cell]")
+	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
+	rich_text_label.append_text("[cell][color=#FFA500]Typed (ms)[/color][/cell]")
+	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
+	rich_text_label.append_text("[cell][color=#FFA500]Improvement[/color][/cell]")
+	rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")  # Separator
+	rich_text_label.append_text("[cell][color=#FFA500]Operations/sec[/color][/cell]")
+	rich_text_label.append_text("[/table]\n")
+
 func _print_results() -> void:
 	rich_text_label.append_text("[color=#FFA500]Performance Analysis Results[/color]\n")
 	rich_text_label.append_text("===========================\n\n")
@@ -184,18 +191,23 @@ func _print_results() -> void:
 		var improvement = test.improvement
 		var perf_color = _get_performance_color(improvement)
 		
-		rich_text_label.append_text("[table=5]")
+		rich_text_label.append_text("[table=9]")  # Increased from 5 to 9
 		# Operation type
 		rich_text_label.append_text("[cell][color=#FFA500]{0}[/color][/cell]".format([test_name.capitalize()]))
+		# Separator
+		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
 		# Untyped time
 		rich_text_label.append_text("[cell][color=yellow]%.2f[/color][/cell]" % test.untyped)
+		# Separator
+		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
 		# Typed time
 		rich_text_label.append_text("[cell][color=#00FF00]%.2f[/color][/cell]" % test.typed)
+		# Separator
+		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
 		# Improvement percentage with color
 		rich_text_label.append_text("[cell][color={0}]%.2f%%[/color][/cell]".format([perf_color]) % improvement)
+		# Separator
+		rich_text_label.append_text("[cell][color=#666666]|[/color][/cell]")
 		# Operations per second
 		rich_text_label.append_text("[cell][color=#FFFFFF]{0}[/color][/cell]".format([test.ops_per_sec_typed]))
 		rich_text_label.append_text("[/table]\n")
-	
-	rich_text_label.append_text("\n[color=#888888]Note: Higher improvement percentages indicate better performance gains from static typing.[/color]\n")
-	rich_text_label.append_text("[color=#888888]Operations/sec shows the number of operations possible per second with typed variables.[/color]")
