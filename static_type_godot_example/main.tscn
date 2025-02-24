@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://by85xsaayserk"]
+[gd_scene load_steps=2 format=3 uid="uid://by85xsaayserk"]
+
+[ext_resource type="Script" uid="uid://i8laqpihad3j" path="res://main.gd" id="1_ig7tw"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -9,6 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_ig7tw")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -19,6 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.870588, 0.556863, 0.196078, 1)
 theme_override_colors/font_selected_color = Color(0.87451, 0.631373, 0.341176, 1)
