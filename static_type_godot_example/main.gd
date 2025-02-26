@@ -6,8 +6,8 @@ extends Control
 @onready var label_current_status: RichTextLabel = %LabelCurrentStatus
 @onready var label_results: RichTextLabel = %LabelResults
 
-const ITERATIONS: int = 1_000_000
-const WARMUP_ITERATIONS: int = 1_000
+const ITERATIONS: int = 25_000_000
+const WARMUP_ITERATIONS: int = 10_000
 
 # Threading
 var thread: Thread
