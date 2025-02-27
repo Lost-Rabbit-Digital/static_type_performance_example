@@ -33,7 +33,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_ig7tw")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,22 +41,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="IntroductionSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="IntroductionSection" type="VBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TitleAnalysis" type="RichTextLabel" parent="MarginContainer/VBoxContainer/IntroductionSection"]
+[node name="TitleAnalysis" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/IntroductionSection"]
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.623529, 0.156863, 1)
 bbcode_enabled = true
-text = "Static Typing Performance Analysis"
+text = "Static Typing Performance Benchmark"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelGodotVersion" type="RichTextLabel" parent="MarginContainer/VBoxContainer/IntroductionSection"]
+[node name="LabelGodotVersion" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/IntroductionSection"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0.345098, 0.431373, 0.458824, 1)
 bbcode_enabled = true
@@ -65,19 +70,21 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Seperator" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+[node name="Separator" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0.862745, 0.811765, 0.560784, 1)
 bbcode_enabled = true
-text = "======================================="
+text = "
+
+"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ConfigurationSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ConfigurationSection" type="VBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TitleConfiguration" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ConfigurationSection"]
+[node name="TitleConfiguration" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/ConfigurationSection"]
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.623529, 0.156863, 1)
 bbcode_enabled = true
@@ -86,7 +93,7 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelInformation" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ConfigurationSection"]
+[node name="LabelInformation" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/ConfigurationSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.345098, 0.431373, 0.458824, 1)
@@ -96,61 +103,77 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Seperator2" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+[node name="Separator2" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0.862745, 0.811765, 0.560784, 1)
 bbcode_enabled = true
-text = "======================================="
+text = "
+
+"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ResultsSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ResultsSection" type="VBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TitleResults" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ResultsSection"]
+[node name="TitleResults" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/ResultsSection"]
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.623529, 0.156863, 1)
 bbcode_enabled = true
-text = "Performance Analysis Results"
+text = "Benchmark Results"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelCurrentStatus" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ResultsSection"]
+[node name="LabelCurrentStatus" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/ResultsSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.345098, 0.431373, 0.458824, 1)
 bbcode_enabled = true
-text = "Beginning on warm-up iterations..."
+text = "Waiting for benchmark to begin..."
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ResultsSection"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/ResultsSection"]
 layout_mode = 2
 theme_override_constants/margin_left = 64
 theme_override_constants/margin_right = 64
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/ResultsSection/MarginContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="ScrollContainer/MarginContainer/VBoxContainer/ResultsSection/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = SubResource("Theme_ig7tw")
 
-[node name="LabelResults" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ResultsSection"]
+[node name="LabelResults" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/ResultsSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.345098, 0.431373, 0.458824, 1)
 bbcode_enabled = true
 text = "Results will display here after benchmark."
 fit_content = true
+scroll_following = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CopyrightDisclaimer" type="RichTextLabel" parent="MarginContainer/VBoxContainer/ResultsSection"]
+[node name="Separator3" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/ResultsSection"]
 layout_mode = 2
-size_flags_vertical = 8
-theme_override_colors/default_color = Color(1, 0.623529, 0.156863, 1)
-text = "Lost Rabbit Digital LLC"
+theme_override_colors/default_color = Color(0.862745, 0.811765, 0.560784, 1)
+bbcode_enabled = true
+text = "
+
+"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DisclaimerLabel" type="RichTextLabel" parent="ScrollContainer/MarginContainer/VBoxContainer/ResultsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/default_color = Color(0.345098, 0.431373, 0.458824, 1)
+bbcode_enabled = true
+text = "DISCLAIMER: Results may vary based on hardware configuration and system load. This benchmark provides comparative analysis only and should not be considered definitive performance measurement. © Lost Rabbit Digital LLC. All rights reserved."
+fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
