@@ -75,7 +75,6 @@ layout_mode = 2
 theme_override_colors/default_color = Color(0.862745, 0.811765, 0.560784, 1)
 bbcode_enabled = true
 text = "
-
 "
 fit_content = true
 horizontal_alignment = 1
@@ -108,7 +107,6 @@ layout_mode = 2
 theme_override_colors/default_color = Color(0.862745, 0.811765, 0.560784, 1)
 bbcode_enabled = true
 text = "
-
 "
 fit_content = true
 horizontal_alignment = 1
@@ -162,7 +160,6 @@ layout_mode = 2
 theme_override_colors/default_color = Color(0.862745, 0.811765, 0.560784, 1)
 bbcode_enabled = true
 text = "
-
 "
 fit_content = true
 horizontal_alignment = 1
