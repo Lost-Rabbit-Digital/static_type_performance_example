@@ -146,3 +146,12 @@ text = "Results!"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CopyrightDisclaimer" type="RichTextLabel" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_colors/default_color = Color(1, 0.623529, 0.156863, 1)
+text = "Lost Rabbit Digital LLC"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1

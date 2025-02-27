@@ -16,6 +16,8 @@ var mutex: Mutex
 var is_running: bool = false
 var current_progress: float = 0.0
 var total_tests: int = 4  # integer, float, vector, string tests
+var current_test_index: int = 0
+var iteration_count: int = 0
 
 # Test variables
 var untyped_int = 0
@@ -31,6 +33,9 @@ var results_data: Dictionary = {}
 
 signal test_completed(test_name: String, results: Dictionary)
 signal progress_updated(value: float)
+
+# Progress update interval (update every X iterations)
+const PROGRESS_UPDATE_INTERVAL: int = 250_000
 
 func _ready() -> void:
 	label_results.bbcode_enabled = true
@@ -49,6 +54,8 @@ func start_benchmark() -> void:
 		
 	is_running = true
 	current_progress = 0
+	current_test_index = 0
+	iteration_count = 0
 	progress_bar.value = 0
 	label_current_status.text = "Starting benchmark..."
 	
@@ -59,17 +66,15 @@ func _run_benchmark_thread() -> void:
 	_warmup.call_deferred()
 	
 	# Run each test and update progress
+	current_test_index = 0
 	_test_integer_operations()
-	_update_progress(25)
-	
+	current_test_index = 1
 	_test_float_operations()
-	_update_progress(50)
-	
+	current_test_index = 2
 	_test_vector_operations()
-	_update_progress(75)
-	
+	current_test_index = 3
 	_test_string_operations()
-	_update_progress(100)
+	current_test_index = 4
 	
 	call_deferred("_benchmark_completed")
 
@@ -78,6 +83,11 @@ func _update_progress(value: float) -> void:
 	current_progress = value
 	mutex.unlock()
 	progress_updated.emit.call_deferred(value)
+
+# This function is now replaced with direct progress updates in each test
+func _update_iteration_progress(current_iteration: int) -> void:
+	# Deprecated - kept for reference
+	pass
 
 func _process(_delta: float) -> void:
 	if is_running:
@@ -88,7 +98,7 @@ func _process(_delta: float) -> void:
 func _benchmark_completed() -> void:
 	is_running = false
 	thread.wait_to_finish()
-	progress_bar.value = current_progress
+	progress_bar.value = 100
 	label_current_status.text = "Completed the benchmark"
 	_display_results()
 
@@ -165,18 +175,38 @@ func _display_results() -> void:
 	label_results.text = results_text
 
 func _test_integer_operations() -> void:
+	label_current_status.text = "Testing integer operations..."
+	
+	# Set progress at the start of the test
+	_update_progress(current_test_index * 25)
+	
+	# First half of the test (0-12.5%)
 	var untyped_time = _time_function(func():
 		for i in ITERATIONS:
 			untyped_int += 1
 			untyped_int *= 2
 			untyped_int /= 2
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
+	# Update progress to the half-way point of this test
+	_update_progress(current_test_index * 25 + 12.5)
+	
+	# Second half of the test (12.5-25%)
 	var typed_time = _time_function(func():
 		for i in ITERATIONS:
 			typed_int += 1
 			typed_int *= 2
 			typed_int /= 2
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + 12.5 + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
 	mutex.lock()
@@ -187,20 +217,43 @@ func _test_integer_operations() -> void:
 		"ops_per_sec_typed": _format_ops_per_second(typed_time)
 	}
 	mutex.unlock()
+	
+	# Ensure we're at exactly the end of this test
+	_update_progress((current_test_index + 1) * 25)
 
 func _test_float_operations() -> void:
+	label_current_status.text = "Testing float operations..."
+	
+	# Set progress at the start of the test
+	_update_progress(current_test_index * 25)
+	
+	# First half of the test (0-12.5%)
 	var untyped_time = _time_function(func():
 		for i in ITERATIONS:
 			untyped_float += 1.5
 			untyped_float *= 1.5
 			untyped_float /= 1.5
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
+	# Update progress to the half-way point of this test
+	_update_progress(current_test_index * 25 + 12.5)
+	
+	# Second half of the test (12.5-25%)
 	var typed_time = _time_function(func():
 		for i in ITERATIONS:
 			typed_float += 1.5
 			typed_float *= 1.5
 			typed_float /= 1.5
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + 12.5 + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
 	mutex.lock()
@@ -211,22 +264,45 @@ func _test_float_operations() -> void:
 		"ops_per_sec_typed": _format_ops_per_second(typed_time)
 	}
 	mutex.unlock()
+	
+	# Ensure we're at exactly the end of this test
+	_update_progress((current_test_index + 1) * 25)
 
 func _test_vector_operations() -> void:
+	label_current_status.text = "Testing vector operations..."
+	
+	# Set progress at the start of the test
+	_update_progress(current_test_index * 25)
+	
+	# First half of the test (0-12.5%)
 	var untyped_time = _time_function(func():
 		for i in ITERATIONS:
 			untyped_vector += Vector2.ONE
 			untyped_vector *= 1.5
 			untyped_vector = untyped_vector.normalized()
 			var _dist = untyped_vector.distance_to(Vector2.ZERO)
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
+	# Update progress to the half-way point of this test
+	_update_progress(current_test_index * 25 + 12.5)
+	
+	# Second half of the test (12.5-25%)
 	var typed_time = _time_function(func():
 		for i in ITERATIONS:
 			typed_vector += Vector2.ONE
 			typed_vector *= 1.5
 			typed_vector = typed_vector.normalized()
 			var _dist = typed_vector.distance_to(Vector2.ZERO)
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + 12.5 + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
 	mutex.lock()
@@ -237,20 +313,43 @@ func _test_vector_operations() -> void:
 		"ops_per_sec_typed": _format_ops_per_second(typed_time)
 	}
 	mutex.unlock()
+	
+	# Ensure we're at exactly the end of this test
+	_update_progress((current_test_index + 1) * 25)
 
 func _test_string_operations() -> void:
+	label_current_status.text = "Testing string operations..."
+	
+	# Set progress at the start of the test
+	_update_progress(current_test_index * 25)
+	
+	# First half of the test (0-12.5%)
 	var untyped_time = _time_function(func():
 		for i in ITERATIONS:
 			untyped_string = "test"
 			untyped_string += "_suffix"
 			untyped_string = untyped_string.substr(0, 4)
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
+	# Update progress to the half-way point of this test
+	_update_progress(current_test_index * 25 + 12.5)
+	
+	# Second half of the test (12.5-25%)
 	var typed_time = _time_function(func():
 		for i in ITERATIONS:
 			typed_string = "test"
 			typed_string += "_suffix"
 			typed_string = typed_string.substr(0, 4)
+			
+			if i % PROGRESS_UPDATE_INTERVAL == 0:
+				var half_test_progress = (i / float(ITERATIONS)) * 12.5
+				var overall_progress = (current_test_index * 25.0) + 12.5 + half_test_progress
+				_update_progress(overall_progress)
 	)
 	
 	mutex.lock()
@@ -261,3 +360,6 @@ func _test_string_operations() -> void:
 		"ops_per_sec_typed": _format_ops_per_second(typed_time)
 	}
 	mutex.unlock()
+	
+	# Ensure we're at exactly the end of this test
+	_update_progress((current_test_index + 1) * 25)
