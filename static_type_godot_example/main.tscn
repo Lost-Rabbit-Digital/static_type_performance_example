@@ -65,7 +65,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/default_color = Color(0.345098, 0.431373, 0.458824, 1)
 bbcode_enabled = true
-text = "Godot Engine [color=#458966]4.4.rc1[/color]"
+text = "Godot Engine [color=#458966]4.4.rc2[/color]"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1

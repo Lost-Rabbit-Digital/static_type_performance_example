@@ -192,9 +192,9 @@ func _benchmark_completed() -> void:
 	var overall_improvement = ((total_untyped - total_typed) / total_untyped) * 100
 	
 	if overall_improvement > 15:
-		call_deferred("_update_status", "[Conclusion] Static typing provides significant performance benefits in Godot 4.4.rc1!")
+		call_deferred("_update_status", "[Conclusion] Static typing provides significant performance benefits in Godot 4.4.rc2!")
 	elif overall_improvement > 5:
-		call_deferred("_update_status", "[Conclusion] Static typing offers moderate performance improvements in Godot 4.4.rc1.")
+		call_deferred("_update_status", "[Conclusion] Static typing offers moderate performance improvements in Godot 4.4.rc2.")
 	else:
 		call_deferred("_update_status", "[Conclusion] Static typing shows minimal performance impact in this test configuration.")
 
