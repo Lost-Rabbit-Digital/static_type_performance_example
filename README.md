@@ -1,11 +1,11 @@
 # Godot Static Typing Performance Benchmark
 
-![Godot Version](https://img.shields.io/badge/Godot-4.4.rc1-blue.svg)
+![Godot Version](https://img.shields.io/badge/Godot-4.4.rc2-blue.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 ## Overview
 
-This repository contains a performance benchmark tool for Godot 4.4.rc1 that measures the impact of static typing on GDScript performance. The benchmark compares execution speeds between typed and untyped variables for various data types, providing detailed metrics on performance improvements.
+This repository contains a performance benchmark tool for Godot 4.4.rc2 that measures the impact of static typing on GDScript performance. The benchmark compares execution speeds between typed and untyped variables for various data types, providing detailed metrics on performance improvements.
 
 ## Features
 
@@ -57,7 +57,7 @@ The benchmark utilizes Godot's threading system to ensure UI responsiveness duri
 
 ## Usage
 
-1. Open the project in Godot 4.4.rc1 or higher
+1. Open the project in Godot 4.4.rc2 or higher
 2. Run the benchmark scene
 3. Wait for all tests to complete (may take a few minutes depending on hardware)
 4. Review the detailed results
