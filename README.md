@@ -1,11 +1,11 @@
 # Godot Static Typing Performance Benchmark
 
-![Godot Version](https://img.shields.io/badge/Godot-4.4.rc2-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Godot Version](https://img.shields.io/badge/Godot-4.4.rc1-blue.svg)
+![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 
 ## Overview
 
-This repository contains a performance benchmark tool for Godot 4.4.rc2 that measures the impact of static typing on GDScript performance. The benchmark compares execution speeds between typed and untyped variables for various data types, providing detailed metrics on performance improvements.
+This repository contains a performance benchmark tool for Godot 4.4.rc1 that measures the impact of static typing on GDScript performance. The benchmark compares execution speeds between typed and untyped variables for various data types, providing detailed metrics on performance improvements.
 
 ## Features
 
@@ -57,7 +57,7 @@ The benchmark utilizes Godot's threading system to ensure UI responsiveness duri
 
 ## Usage
 
-1. Open the project in Godot 4.4.rc2 or higher
+1. Open the project in Godot 4.4.rc1 or higher
 2. Run the benchmark scene
 3. Wait for all tests to complete (may take a few minutes depending on hardware)
 4. Review the detailed results
@@ -81,4 +81,15 @@ Contributions are welcome! Feel free to:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0) - see the LICENSE file for details.
+
+The GPL-3.0 ensures that:
+
+1. Users can freely use, modify, and distribute this software
+2. Any derivative works must also be distributed under the GPL-3.0
+3. Copyright notices and attribution to Lost Rabbit Digital LLC must be preserved
+4. Source code for derivative works must be made available
+
+This license was chosen to ensure attribution to Lost Rabbit Digital LLC while allowing the community to freely use and build upon this benchmark tool.
+
+For the complete license text, see [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
