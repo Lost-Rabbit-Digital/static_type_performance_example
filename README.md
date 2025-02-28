@@ -23,10 +23,10 @@ This repository contains a performance benchmark tool for Godot 4.4.rc2 that mea
 
 The benchmark measures performance differences between variables with explicit type annotations (static typing) and variables without type annotations (dynamic typing). Results typically show:
 
-- Integer operations: Performance improvements of 5-15%
-- Float operations: Performance improvements of 5-15%
-- Vector operations: Performance improvements of 10-20%
-- String operations: Performance improvements of 5-15%
+- Integer operations: Performance improvements of 15-25%
+- Float operations: Performance improvements of 15-30%
+- Vector operations: Performance improvements of 10-45%
+- String operations: Performance improvements of 5-10%
 
 Actual results will vary based on hardware, OS, and specific Godot version.
 
