@@ -67,68 +67,50 @@ func _run_benchmark_thread() -> void:
 	
 	# Add detailed transition status updates
 	call_deferred("_update_status", "[System] Warmup phase complete. Preparing benchmark environment...")
-	OS.delay_msec(300)
 	
 	call_deferred("_update_status", "[System] Configuring memory for optimal test conditions...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[System] Allocating thread resources for benchmark tests...")
-	OS.delay_msec(200)
 	
 	# Run each test and update progress with very detailed status messages
 	current_test_index = 0
 	call_deferred("_update_status", "[Integer Benchmark] Initializing integer performance tests...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Integer Benchmark] Configuring integer test parameters...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Integer Benchmark] Starting untyped vs typed measurements...")
-	OS.delay_msec(100)
 	_test_integer_operations()
 	
 	current_test_index = 1
 	call_deferred("_update_status", "[Float Benchmark] Initializing floating-point performance tests...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Float Benchmark] Configuring IEEE-754 test parameters...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Float Benchmark] Starting untyped vs typed measurements...")
-	OS.delay_msec(100)
 	_test_float_operations()
 	
 	current_test_index = 2
 	call_deferred("_update_status", "[Vector Benchmark] Initializing Vector2 performance tests...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Vector Benchmark] Configuring vector operation parameters...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Vector Benchmark] Starting untyped vs typed measurements...")
-	OS.delay_msec(100)
 	_test_vector_operations()
 	
 	current_test_index = 3
 	call_deferred("_update_status", "[String Benchmark] Initializing string performance tests...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[String Benchmark] Configuring string operation parameters...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[String Benchmark] Starting untyped vs typed measurements...")
-	OS.delay_msec(100)
 	_test_string_operations()
 	
 	current_test_index = 4
 	call_deferred("_update_status", "[Analysis] All benchmarks complete. Collecting performance data...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Analysis] Processing timing results across all tests...")
-	OS.delay_msec(200)
 	
 	call_deferred("_update_status", "[Analysis] Calculating performance metrics and improvements...")
-	OS.delay_msec(200)
 	
 	call_deferred("_benchmark_completed")
 
@@ -292,22 +274,16 @@ func _display_results() -> void:
 	for test_name in results_data:
 		label_current_status.text = "[Analysis] Processing detailed " + test_name + " performance metrics..."
 		
-		# Add a small delay to show the status message
-		OS.delay_msec(150)
-		
 		var test = results_data[test_name]
 		var perf_color = _get_performance_color(test.improvement)
 		var ops_color = _get_ops_color(test.ops_per_sec_typed)
 		
 		# Show detailed performance analysis in status
 		label_current_status.text = "[Analysis] " + test_name.capitalize() + ": Calculating execution time difference..."
-		OS.delay_msec(100)
 		
 		label_current_status.text = "[Analysis] " + test_name.capitalize() + ": Computing operations per second..."
-		OS.delay_msec(100)
 		
 		label_current_status.text = "[Analysis] " + test_name.capitalize() + ": Determining performance improvement percentage..."
-		OS.delay_msec(100)
 		
 		# Build results text
 		results_text += "[color=#ADD8E6]%s:[/color]\n" % test_name.capitalize()
@@ -319,25 +295,21 @@ func _display_results() -> void:
 	
 	# Calculate overall improvement with detailed status updates
 	label_current_status.text = "[Summary] Calculating aggregate performance metrics..."
-	OS.delay_msec(150)
 	
 	var total_untyped = 0.0
 	var total_typed = 0.0
 	
 	for test_name in results_data:
 		label_current_status.text = "[Summary] Adding " + test_name + " results to totals..."
-		OS.delay_msec(50)
 		total_untyped += results_data[test_name].untyped
 		total_typed += results_data[test_name].typed
 	
 	label_current_status.text = "[Summary] Computing overall improvement percentage..."
-	OS.delay_msec(150)
 	
 	var overall_improvement = ((total_untyped - total_typed) / total_untyped) * 100
 	var overall_color = _get_performance_color(overall_improvement)
 	
 	label_current_status.text = "[Summary] Formatting final performance report..."
-	OS.delay_msec(150)
 	
 	# Add summary section
 	results_text += "[color=#FFD700]Overall Summary:[/color]\n"
@@ -352,7 +324,6 @@ func _display_results() -> void:
 	results_text += "  [color=#ADD8E6]Compiler Optimization:[/color] Type information enables better JIT optimization\n"
 	
 	label_current_status.text = "[Rendering] Displaying final benchmark results..."
-	OS.delay_msec(100)
 	
 	label_results.text = results_text
 

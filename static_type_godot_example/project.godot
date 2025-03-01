@@ -14,6 +14,7 @@ config/name="Static Type Godot Example"
 config/description="Benchmark to measure impact of static typing in GDScript by Lost Rabbit Digital
 "
 config/version="0.1.0"
+config/tags=PackedStringArray("open_sourced", "utility")
 run/main_scene="uid://by85xsaayserk"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
